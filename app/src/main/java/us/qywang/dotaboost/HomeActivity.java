@@ -37,8 +37,11 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 DotaAPI dota = new DotaAPI();
-//                Log.d("CustomLOG", dota.get_match_detail("2620639797"));
-                Log.d("CustomLOG", dota.get_player_detail("364848976"));
+                Log.d("CustomLOG", dota.get_match_detail("2620639797"));
+////                Log.d("CustomLOG", dota.get_player_detail("364848976"));
+
+                DotaApiHandler handler = new DotaApiHandler("2620639797");
+                Log.d("hey", handler.doInBackground().toString() + "END");
 
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
