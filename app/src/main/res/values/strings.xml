@@ -5,4 +5,19 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+
+    <!-- Menu Items -->
+    <string name="nav_my_stat">My stats</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_favorite">Favorite</string>
+    <string name="nav_counter">Counter Picks</string>
+    <string name="nav_settings">Settings</string>
+
+
+    <!-- Error Fragment -->
+    <string name="error_could_not_find">Could not find the page.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
