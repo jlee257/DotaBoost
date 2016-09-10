@@ -28,7 +28,7 @@ public class DotaApiHandler extends AsyncTask<String, String, String> {
     protected String doInBackground(String... args) {
 
         StringBuilder result = new StringBuilder();
-        String gmd_url = "http://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/v1";
+        String gmd_url = "http://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v1";
 
         try {
             URL url = new URL(gmd_url + "?key=" + API_Key + "&match_id=" + match_id0);

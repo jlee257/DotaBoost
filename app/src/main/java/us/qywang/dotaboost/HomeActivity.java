@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONException;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,6 +31,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -37,11 +40,16 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 DotaAPI dota = new DotaAPI();
-                Log.d("CustomLOG", dota.get_match_detail("2620639797"));
-////                Log.d("CustomLOG", dota.get_player_detail("364848976"));
+//                Log.d("CustomLOG", dota.get_match_detail("2620639797"));
+//                Log.d("CustomLOG", dota.get_player_detail("364848976"));
 
                 DotaApiHandler handler = new DotaApiHandler("2620639797");
-                Log.d("hey", handler.doInBackground().toString() + "END");
+//                Log.d("hey", handler.doInBackground().toString() + "END");
+                try {
+                    Log.d("Match_ID is", JsonConverter.get_match_id("364848976") + "   END");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
