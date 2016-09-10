@@ -30,9 +30,6 @@ public class Match {
         duration = 3600;
         match_id = "2620639797";
     }
-
-
-
 }
 
 
