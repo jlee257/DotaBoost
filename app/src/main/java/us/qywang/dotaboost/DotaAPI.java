@@ -19,6 +19,10 @@ public class DotaAPI extends AsyncTask<Void, Void, String> {
 
 
     public static String get_match_detail(String match_num) {
+        int i = 0;
+        Log.d("get_match_detail", String.valueOf(i+=1));
+
+
         String gmd_url = "http://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/v1";
 
         try {
@@ -54,6 +58,8 @@ public class DotaAPI extends AsyncTask<Void, Void, String> {
     }
 
     public static String get_hero_info() {
+        int i = 0;
+        Log.d("get_hero_info", String.valueOf(i+=1));
 
         StringBuilder result = new StringBuilder();
 
@@ -83,6 +89,10 @@ public class DotaAPI extends AsyncTask<Void, Void, String> {
     }
 
     public static String get_item_info() {
+        int i = 0;
+        Log.d("get_item_info", String.valueOf(i+=1));
+
+
 
         StringBuilder result = new StringBuilder();
 
@@ -114,6 +124,9 @@ public class DotaAPI extends AsyncTask<Void, Void, String> {
 
 
     public static String get_match_history(String playerid) {
+        int i = 0;
+
+        Log.d("get_match_history", String.valueOf(i+=1));
 
         StringBuilder result = new StringBuilder();
 

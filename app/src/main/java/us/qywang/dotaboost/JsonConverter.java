@@ -12,9 +12,31 @@ import java.util.HashMap;
 /**
  * Created by 25717 on 9/9/2016.
  */
+
+
+
 public class JsonConverter {
 
+
+    public JsonConverter() throws JSONException {
+
+    }
+
+
+
     public static Match get_match(String match_id) throws JSONException {
+        String s = "String";
+
+        Log.d("heroinfo", s);
+
+        return get_match(match_id,
+                new JSONObject(DotaAPI.get_hero_info()), new JSONObject(DotaAPI.get_item_info()));
+    }
+
+
+
+
+    public static Match get_match(String match_id, JSONObject hero_info, JSONObject item_info) throws JSONException {
         String match_str = DotaAPI.get_match_detail(match_id);
 
         Match match_detail = new Match();
@@ -32,25 +54,20 @@ public class JsonConverter {
 
         JSONArray players = result.getJSONArray("players");
         HashMap<Integer, String> item_map = new HashMap();
-        String item_str = DotaAPI.get_item_info();
 
-
-        JSONObject item_sheet = new JSONObject(item_str);
-        JSONArray item_list = item_sheet.getJSONObject("result").getJSONArray("items");
+        JSONArray item_list = item_info.getJSONObject("result").getJSONArray("items");
         for (int k = 0; k < item_list.length(); k++){
-            JSONObject item_info = item_list.getJSONObject(k);
-            item_map.put(item_info.getInt("id") ,item_info.getString("name").substring(5));
+            JSONObject item_loop = item_list.getJSONObject(k);
+            item_map.put(item_loop.getInt("id") ,item_loop.getString("name").substring(5));
         }
 
 
         HashMap<Integer, String> hero_map = new HashMap();
 
-        String hero_str = DotaAPI.get_hero_info();
-        JSONObject hero_sheet = new JSONObject(hero_str);
-        JSONArray hero_list = hero_sheet.getJSONObject("result").getJSONArray("heroes");
+        JSONArray hero_list = hero_info.getJSONObject("result").getJSONArray("heroes");
         for (int k = 0; k < hero_list.length(); k++){
-            JSONObject hero_info = hero_list.getJSONObject(k);
-            hero_map.put(hero_info.getInt("id"), hero_info.getString("name").substring(14));
+            JSONObject hero_loop = hero_list.getJSONObject(k);
+            hero_map.put(hero_loop.getInt("id"), hero_loop.getString("name").substring(14));
         }
         for (int i = 0; i < 10; i++){
             JSONObject jplayer = players.getJSONObject(i);
@@ -89,7 +106,7 @@ public class JsonConverter {
 
 
     public static Player get_player(String account_id) throws JSONException {
-        int count = 5;
+        int count = 20;
 
         Player player = new Player();
         String steam_id = BitConverter.converter(account_id);
@@ -145,7 +162,6 @@ public class JsonConverter {
                         if (hero_pool.get(h).hero_name.equals(mp.hero_name)){
                             hero_pool.get(h).count += 1;
                             hero_pool.get(h).win += mp.win?1:0;
-                            hero_pool.get(h).hero_win_rate = (double)hero_pool.get(h).win/(double)count;
                             hero_not_in_lst = false;
                         }
                     }
@@ -153,7 +169,6 @@ public class JsonConverter {
                         PlayedHero new_hero = new PlayedHero();
                         new_hero.hero_name = mp.hero_name;
                         new_hero.count += 1;
-                        new_hero.hero_win_rate = mp.win?1:0;
                         hero_pool.add(new_hero);
                     }
 

@@ -43,7 +43,6 @@ class PlayedHero {
     public String hero_name;
     public int count;
     public int win;
-    public double hero_win_rate;
 
 
     public PlayedHero() {
@@ -58,6 +57,7 @@ class PlayedHero {
 
 class MatchSimple {
     public String match_id;
+    public String hero_name;
     public Boolean win;
     public String match_type;
     public int kill;

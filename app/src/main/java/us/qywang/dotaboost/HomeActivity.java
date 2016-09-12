@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.jar.Attributes;
 
 public class HomeActivity extends AppCompatActivity
@@ -42,12 +43,17 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 try {
-                    Log.d("Player kda is", String.valueOf(JsonConverter.get_player("149267137").kda));
 
-                    for (int i = 0; i < (JsonConverter.get_player("149267137").most_played.size()); i++){
-                        Log.d("fav heros are:", JsonConverter.get_player("149267137").most_played.get(i).hero_name);
-                        Log.d("played count:", String.valueOf(JsonConverter.get_player("149267137").most_played.get(i).count));
-                        Log.d("his win rate is:", String.valueOf(JsonConverter.get_player("149267137").most_played.get(i).hero_win_rate));
+                    ArrayList<PlayedHero> hero_pool = new ArrayList<PlayedHero>();
+                    Player PlayerX = JsonConverter.get_player("149267137");
+
+                    hero_pool = PlayerX.most_played;
+
+                    for (int i = 0; i < hero_pool.size(); i++){
+
+                        Log.d("fav heros are:", hero_pool.get(i).hero_name);
+                        Log.d("played count:", String.valueOf(hero_pool.get(i).count));
+                        Log.d("win?", String.valueOf(hero_pool.get(i).win));
 
 
                     }
