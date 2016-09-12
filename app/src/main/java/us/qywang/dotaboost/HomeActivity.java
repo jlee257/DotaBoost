@@ -17,6 +17,8 @@ import android.view.MenuItem;
 
 import org.json.JSONException;
 
+import java.util.jar.Attributes;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -40,16 +42,22 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 DotaAPI dota = new DotaAPI();
-//                Log.d("CustomLOG", dota.get_match_detail("2620639797"));
+//                Log.d("1st", dota.get_match_detail("2620639797"));
 //                Log.d("CustomLOG", dota.get_player_detail("364848976"));
 
-                DotaApiHandler handler = new DotaApiHandler("2620639797");
-//                Log.d("hey", handler.doInBackground().toString() + "END");
-                try {
-                    Log.d("Match_ID is", JsonConverter.get_match_id("364848976") + "   END");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
+//                try {
+//                    Log.d("The players are", JsonConverter.get_match("2620639797").players.get(1).item_1_name + "   END");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+//                try {
+//                    Log.d("Player's steam avatarmedium", JsonConverter.get_player("364848976").personaname);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
 
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();

@@ -18,7 +18,7 @@ public class DotaAPI extends AsyncTask<Void, Void, String> {
     private static String API_Key = "E4E2F6CCA37356210C162C1CC98DCF2F";
 
 
-    public String get_match_detail(String match_num) {
+    public static String get_match_detail(String match_num) {
         String gmd_url = "http://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/v1";
 
         try {
@@ -38,7 +38,7 @@ public class DotaAPI extends AsyncTask<Void, Void, String> {
 
                 while ((line = bufferedReader.readLine()) != null) {
 
-                    stringBuilder.append(line).append("\n");
+                    stringBuilder.append(line);
                 }
                 bufferedReader.close();
                 return stringBuilder.toString();
@@ -53,8 +53,67 @@ public class DotaAPI extends AsyncTask<Void, Void, String> {
         }
     }
 
+    public static String get_hero_info() {
 
-    public static String get_player_detail(String playerid) {
+        StringBuilder result = new StringBuilder();
+
+        String gmd_url = "http://api.steampowered.com/IEconDOTA2_570/GetHeroes/v1";
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(gmd_url + "?key=" + API_Key);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.append(line);
+            }
+
+        }catch( Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+
+            urlConnection.disconnect();
+            return result.toString();
+        }
+
+    }
+
+    public static String get_item_info() {
+
+        StringBuilder result = new StringBuilder();
+
+        String gmd_url = "http://api.steampowered.com/IEconDOTA2_570/GetGameItems/v1";
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(gmd_url + "?key=" + API_Key);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.append(line);
+            }
+
+        }catch( Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+
+            urlConnection.disconnect();
+            return result.toString();
+        }
+
+    }
+
+
+
+    public static String get_match_history(String playerid) {
 
         StringBuilder result = new StringBuilder();
 
@@ -83,7 +142,34 @@ public class DotaAPI extends AsyncTask<Void, Void, String> {
 
     }
 
-    private boolean result;
+    public static String steam_info(String steam_id){
+        StringBuilder result = new StringBuilder();
+
+        String gmd_url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/";
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(gmd_url + "?key=" + API_Key + "&steamids=" + steam_id);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.append(line);
+            }
+
+        }catch( Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+
+            urlConnection.disconnect();
+            return result.toString();
+        }
+
+
+    }
 
 
     @Override

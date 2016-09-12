@@ -6,48 +6,168 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by 25717 on 9/9/2016.
  */
 public class JsonConverter {
 
+    public static Match get_match(String match_id) throws JSONException {
+        String match_str = DotaAPI.get_match_detail(match_id);
 
-    public static ArrayList get_match_id(String player_id) throws JSONException {
-        Log.d("PlayerID is", player_id);
+        Match match_detail = new Match();
 
-        Log.d("detail is", DotaAPI.get_player_detail("364848976"));
+        JSONObject obj = new JSONObject(match_str);
 
-        JSONObject obj = new JSONObject(DotaAPI.get_player_detail(player_id));
+        JSONObject result = obj.getJSONObject("result");
 
+        match_detail.match_id = match_id;
+        match_detail.duration = result.getInt("duration");
+        match_detail.radiant_win = result.getBoolean("radiant_win");
+        match_detail.radiant_score = result.getString("radiant_score");
+        match_detail.dire_score = result.getString("dire_score");
+        match_detail.start_time = result.getInt("start_time");
 
-        JSONArray matches =  obj.getJSONObject("result").getJSONArray("matches");
-
-//        JSONObject matches = obj.getJSONObject("result").getJSONObject("matches");
-
-//        Log.d("num_results", obj.getJSONObject("result").get("num_results").toString());
-//        Log.d("id", obj.getJSONObject("result").getJSONArray("matches").getJSONObject(1).get("match_id").toString());
-
-
-
-//        Log.d("num_results", obj.getJSONObject("result").getJSONObject("matches").getJSONObject("1").get("match_id").toString());
-
-
-
-        ArrayList match_ids = new ArrayList();
+        JSONArray players = result.getJSONArray("players");
+        HashMap<Integer, String> item_map = new HashMap();
+        String item_str = DotaAPI.get_item_info();
 
 
-        for (int i = 0; i< 10; i++){
-            match_ids.add(matches.getJSONObject(i).get("match_id"));
-
-
+        JSONObject item_sheet = new JSONObject(item_str);
+        JSONArray item_list = item_sheet.getJSONObject("result").getJSONArray("items");
+        for (int k = 0; k < item_list.length(); k++){
+            JSONObject item_info = item_list.getJSONObject(k);
+            item_map.put(item_info.getInt("id") ,item_info.getString("name").substring(5));
         }
 
-        return match_ids;
+
+        HashMap<Integer, String> hero_map = new HashMap();
+
+        String hero_str = DotaAPI.get_hero_info();
+        JSONObject hero_sheet = new JSONObject(hero_str);
+        JSONArray hero_list = hero_sheet.getJSONObject("result").getJSONArray("heroes");
+        for (int k = 0; k < hero_list.length(); k++){
+            JSONObject hero_info = hero_list.getJSONObject(k);
+            hero_map.put(hero_info.getInt("id"), hero_info.getString("name").substring(14));
+        }
+        for (int i = 0; i < 10; i++){
+            JSONObject jplayer = players.getJSONObject(i);
+            MatchPlayer player = new MatchPlayer();
+            player.match_id = match_id;
+            player.account_id = jplayer.getString("account_id");
+            player.team_radiant = jplayer.getInt("player_slot") < 5 ? true: false;
+            player.win = player.team_radiant == match_detail.radiant_win? true:false;
+            player.abandoned = jplayer.getInt("leaver_status") == 3? true: false;
+            player.is_rank =jplayer.getInt("lobby_type")== 8? true:false;
+            player.hero_name = hero_map.get(jplayer.getInt("hero_id"));
+            player.kills = jplayer.getInt("kills");
+            player.assists = jplayer.getInt("assists");
+            player.deaths = jplayer.getInt("deaths");
+            player.gold = jplayer.getInt("gold");
+            player.gold_per_min = jplayer.getInt("gold_per_min");
+            player.level = jplayer.getInt("level");
+            player.hero_damage = jplayer.getInt("hero_damage");
+            player.tower_damage = jplayer.getInt("tower_damage");
+            player.item_0_name = item_map.get(jplayer.getInt("item_0"));
+            player.item_1_name = item_map.get(jplayer.getInt("item_1"));
+            player.item_2_name = item_map.get(jplayer.getInt("item_2"));
+            player.item_3_name = item_map.get(jplayer.getInt("item_3"));
+            player.item_4_name = item_map.get(jplayer.getInt("item_4"));
+            player.item_5_name = item_map.get(jplayer.getInt("item_5"));
+
+            match_detail.players.add(player);
+        }
+        return match_detail;
+    }
 
 
+    public static Player get_player(String account_id) throws JSONException {
+        int count = 10;
+
+        Player player = new Player();
+        String steam_id = BitConverter.converter(account_id);
+
+        String steam_info = DotaAPI.steam_info(steam_id);
+        JSONObject obj = new JSONObject(steam_info);
+        JSONObject player_info = obj.getJSONObject("response").getJSONArray("players").getJSONObject(0);
+
+        player.personaname =player_info.getString("personaname");
+        player.avatarmedium =player_info.getString("avatarmedium");
+
+
+
+        String match_str = DotaAPI.get_match_history(account_id);
+        JSONObject objm = new JSONObject(match_str);
+
+        JSONArray matches = objm.getJSONObject("result").getJSONArray("matches");
+
+        ArrayList<Match> match_arr = new ArrayList<>();
+
+        for (int i = 1; i < count; i++){
+            match_arr.add(get_match(matches.getJSONObject(i).getString("match_id")));
+        }
+        int kill_total = 0;
+        int assist_total = 0;
+        int death_total = 0;
+        int win = 0;
+        ArrayList<PlayedHero> hero_pool = new ArrayList<>();
+        ArrayList<MatchSimple> match_pool = new ArrayList<>();
+
+        for (int j = 0; j < count; j++){
+            ArrayList<MatchPlayer> players = match_arr.get(j).players;
+            for (int k = 1; k < 10; k++){
+                MatchPlayer mp = players.get(k);
+                if (mp.account_id == account_id){
+                    MatchSimple new_match = new MatchSimple();
+                    new_match.assist = mp.assists;
+                    new_match.death = mp.deaths;
+                    new_match.kill = mp.kills;
+                    new_match.match_id = mp.match_id;
+                    new_match.match_type=mp.is_rank? "Rank":"Normal";
+                    new_match.win = mp.win;
+                    match_pool.add(new_match);
+
+                    kill_total += mp.kills;
+                    assist_total += mp.assists;
+                    death_total+=mp.assists;
+                    win += mp.win? 1:0;
+                    boolean hero_not_in_lst = true;
+                    for (int h = 0; h< hero_pool.size(); h++){
+                        if (hero_pool.get(h).hero_name == mp.hero_name){
+                            hero_pool.get(h).count += 1;
+                            hero_pool.get(h).win += mp.win?1:0;
+                            hero_pool.get(h).hero_win_rate = hero_pool.get(h).win/count;
+                            hero_not_in_lst = false;
+                        }
+                    }
+                    if (hero_not_in_lst){
+                        PlayedHero new_hero = new PlayedHero();
+                        new_hero.hero_name = mp.hero_name;
+                        new_hero.count += 1;
+                        new_hero.hero_win_rate = mp.win?1:0;
+                        hero_pool.add(new_hero);
+                    }
+
+                }
+            }
+
+        }
+        double avg_killed = kill_total/count;
+        double avg_assist = assist_total/count;
+        double avg_death = death_total/count;
+
+
+        player.kill = avg_killed;
+        player.assist = avg_assist;
+        player.death = avg_death;
+        player.win_rate = win/assist_total;
+        player.kda = (kill_total + assist_total)/death_total;
+        player.most_played = hero_pool;
+
+        
+        return player;
     }
 
 
