@@ -41,26 +41,21 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DotaAPI dota = new DotaAPI();
-//                Log.d("1st", dota.get_match_detail("2620639797"));
-//                Log.d("CustomLOG", dota.get_player_detail("364848976"));
+                try {
+                    Log.d("Player kda is", String.valueOf(JsonConverter.get_player("149267137").kda));
+
+                    for (int i = 0; i < (JsonConverter.get_player("149267137").most_played.size()); i++){
+                        Log.d("fav heros are:", JsonConverter.get_player("149267137").most_played.get(i).hero_name);
+                        Log.d("played count:", String.valueOf(JsonConverter.get_player("149267137").most_played.get(i).count));
+                        Log.d("his win rate is:", String.valueOf(JsonConverter.get_player("149267137").most_played.get(i).hero_win_rate));
 
 
-//                try {
-//                    Log.d("The players are", JsonConverter.get_match("2620639797").players.get(1).item_1_name + "   END");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                    }
 
-//                try {
-//                    Log.d("Player's steam avatarmedium", JsonConverter.get_player("364848976").personaname);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
 

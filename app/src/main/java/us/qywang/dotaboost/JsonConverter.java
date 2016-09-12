@@ -60,7 +60,7 @@ public class JsonConverter {
             player.team_radiant = jplayer.getInt("player_slot") < 5 ? true: false;
             player.win = player.team_radiant == match_detail.radiant_win? true:false;
             player.abandoned = jplayer.getInt("leaver_status") == 3? true: false;
-            player.is_rank =jplayer.getInt("lobby_type")== 8? true:false;
+            player.is_rank =result.getInt("lobby_type")== 7? true:false;
             player.hero_name = hero_map.get(jplayer.getInt("hero_id"));
             player.kills = jplayer.getInt("kills");
             player.assists = jplayer.getInt("assists");
@@ -83,8 +83,13 @@ public class JsonConverter {
     }
 
 
+
+
+
+
+
     public static Player get_player(String account_id) throws JSONException {
-        int count = 10;
+        int count = 5;
 
         Player player = new Player();
         String steam_id = BitConverter.converter(account_id);
@@ -105,9 +110,11 @@ public class JsonConverter {
 
         ArrayList<Match> match_arr = new ArrayList<>();
 
-        for (int i = 1; i < count; i++){
+        for (int i = 0; i < count; i++){
             match_arr.add(get_match(matches.getJSONObject(i).getString("match_id")));
         }
+
+
         int kill_total = 0;
         int assist_total = 0;
         int death_total = 0;
@@ -119,7 +126,7 @@ public class JsonConverter {
             ArrayList<MatchPlayer> players = match_arr.get(j).players;
             for (int k = 1; k < 10; k++){
                 MatchPlayer mp = players.get(k);
-                if (mp.account_id == account_id){
+                if (mp.account_id.equals(account_id)){
                     MatchSimple new_match = new MatchSimple();
                     new_match.assist = mp.assists;
                     new_match.death = mp.deaths;
@@ -131,14 +138,14 @@ public class JsonConverter {
 
                     kill_total += mp.kills;
                     assist_total += mp.assists;
-                    death_total+=mp.assists;
+                    death_total+=mp.deaths;
                     win += mp.win? 1:0;
                     boolean hero_not_in_lst = true;
                     for (int h = 0; h< hero_pool.size(); h++){
-                        if (hero_pool.get(h).hero_name == mp.hero_name){
+                        if (hero_pool.get(h).hero_name.equals(mp.hero_name)){
                             hero_pool.get(h).count += 1;
                             hero_pool.get(h).win += mp.win?1:0;
-                            hero_pool.get(h).hero_win_rate = hero_pool.get(h).win/count;
+                            hero_pool.get(h).hero_win_rate = (double)hero_pool.get(h).win/(double)count;
                             hero_not_in_lst = false;
                         }
                     }
@@ -158,15 +165,14 @@ public class JsonConverter {
         double avg_assist = assist_total/count;
         double avg_death = death_total/count;
 
-
         player.kill = avg_killed;
         player.assist = avg_assist;
         player.death = avg_death;
-        player.win_rate = win/assist_total;
-        player.kda = (kill_total + assist_total)/death_total;
+        player.win_rate = win/count;
+        player.kda = death_total==0? kill_total+assist_total : ((double) kill_total + (double) assist_total)/(double) death_total;
         player.most_played = hero_pool;
 
-        
+
         return player;
     }
 
