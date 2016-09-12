@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 
 /**
@@ -67,7 +68,6 @@ public class SearchFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
 
@@ -97,11 +97,12 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String title = searchText.getText().toString();
+                Toast.makeText(getActivity(), "Loading Player data...", Toast.LENGTH_LONG).show();
                 if (TextUtils.isEmpty(title)) {
                     errorDisplay.setVisibility(View.VISIBLE);
                 } else {
                     errorDisplay.setVisibility(View.INVISIBLE);
-                    PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(title, "hi");
+                    PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(new Player(), "364848976");
                     FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(
                             R.id.mainLayout,

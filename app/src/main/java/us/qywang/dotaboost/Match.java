@@ -1,14 +1,15 @@
 package us.qywang.dotaboost;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Aspire on 9/9/2016.
  */
-public class Match {
+public class Match implements Serializable {
 
     public ArrayList<MatchPlayer> players = new ArrayList<MatchPlayer>();
-    public boolean radient_win;
+    public boolean radiant_win;
     public int duration;
     public String match_id;
 
@@ -26,8 +27,8 @@ public class Match {
         players.add(new MatchPlayer());
         players.add(new MatchPlayer());
 
-        radient_win = true;
-        duration = 3600;
+        radiant_win = true;
+        duration = (int) (Math.random() * 4500);
         match_id = "2620639797";
     }
 }
@@ -38,10 +39,10 @@ public class Match {
 
 
 
-class MatchPlayer {
+class MatchPlayer implements Serializable {
 
     public String account_id;
-    public Boolean team_radient;
+    public Boolean team_radiant;
     public String hero_name;
     public String item_0_name;
     public String item_1_name;
@@ -61,20 +62,20 @@ class MatchPlayer {
 
         // Replace with your code
         account_id = "364848976";
-        team_radient = true;
-        hero_name = "npc_dota_hero_bloodseeker";
-        item_0_name = "item_blades_of_attack";
+        team_radiant = true;
+        hero_name = "bloodseeker";
+        item_0_name = "blades_of_attack";
         item_1_name = null;
         item_2_name = null;
         item_3_name = null;
         item_4_name = null;
         item_5_name = null;
-        kills = 7;
-        deaths = 4;
-        assists = 6;
-        gold = 28328;
-        gold_per_min = 4234;
-        level = 20;
-        hero_damage = 50920;
+        kills = (int) (Math.random() * 5);
+        deaths = (int) (Math.random() * 4);
+        assists = (int) (Math.random() * 10);
+        gold = (int) (Math.random() * 20000);
+        gold_per_min = (int) (Math.random() * 700);
+        level = (int) (Math.random() * 24) + 1;
+        hero_damage = (int) (Math.random() * 50000);;
     }
 }

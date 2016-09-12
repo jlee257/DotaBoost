@@ -5,6 +5,17 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="dotaRed">#b92f19</color>
+    <color name="dotaGreen">#5aae00</color>
     <color name="dotaDarkRed">#822112</color>
     <color name="dotaOrange">#bd691a</color>
+    <color name="dotaBlue">#1e4c86</color>
+
+    <color name="starColor">#FFCCAA00</color>
+    <color name="backgroundGray">#CCCCCC</color>
+    <color name="backgroundVictory">#92cbdb</color>
+    <color name="backgroundDefeat">#db9292</color>
+
+    <color name="backgroundRadiant">#9aea8f</color>
+    <color name="backgroundDire">#db9292</color>
+
 </resources>

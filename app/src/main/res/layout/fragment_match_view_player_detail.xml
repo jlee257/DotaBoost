@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/matchPlayerLayout"
+    android:background="@color/backgroundRadiant">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="56dp"
+            android:id="@+id/matchPlayerIcon"
+            android:src="@drawable/default_hero"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Player Name"
+            android:id="@+id/matchPlayerName"
+            android:layout_toRightOf="@+id/matchPlayerIcon"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="24dp"
+                android:id="@+id/matchPlayerItemIcon0"
+                android:src="@drawable/default_item"/>
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="24dp"
+                android:id="@+id/matchPlayerItemIcon1"
+                android:src="@drawable/default_item"
+                android:layout_toRightOf="@+id/matchPlayerItemIcon0"/>
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="24dp"
+                android:id="@+id/matchPlayerItemIcon2"
+                android:src="@drawable/default_item"
+                android:layout_toRightOf="@+id/matchPlayerItemIcon1"/>
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="24dp"
+                android:id="@+id/matchPlayerItemIcon3"
+                android:src="@drawable/default_item"
+                android:layout_below="@+id/matchPlayerItemIcon0"/>
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="24dp"
+                android:id="@+id/matchPlayerItemIcon4"
+                android:src="@drawable/default_item"
+                android:layout_below="@+id/matchPlayerItemIcon0"
+                android:layout_toRightOf="@+id/matchPlayerItemIcon3"/>
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="24dp"
+                android:id="@+id/matchPlayerItemIcon5"
+                android:src="@drawable/default_item"
+                android:layout_below="@+id/matchPlayerItemIcon0"
+                android:layout_toRightOf="@+id/matchPlayerItemIcon4"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="18dp"
+            android:layout_marginEnd="18dp"
+            android:id="@+id/playerLayoutGold"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="1500 (100/min)"
+                android:textColor="@color/starColor"
+                android:id="@+id/matchPlayerGold"
+                android:layout_alignTop="@+id/matchPlayerGoldBarBack"
+                android:layout_alignLeft="@+id/matchPlayerGoldBarBack"
+                android:layout_alignStart="@+id/matchPlayerGoldBarBack" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="100dp"
+                android:layout_height="10dp"
+                android:id="@+id/matchPlayerGoldBarBack"
+                android:background="@color/backgroundGray"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
+
+                <RelativeLayout
+                    android:background="@color/starColor"
+                    android:id="@+id/matchPlayerGoldBar"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"></RelativeLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="18dp"
+            android:layout_marginEnd="18dp"
+            android:id="@+id/playerLayoutKDA"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="1/1/1 (2.0)"
+                android:id="@+id/matchPlayerKDA"
+                android:layout_alignTop="@+id/matchPlayerGoldBarBack"
+                android:layout_alignLeft="@+id/matchPlayerGoldBarBack"
+                android:layout_alignStart="@+id/matchPlayerGoldBarBack" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="100dp"
+                android:layout_height="10dp"
+                android:id="@+id/player"
+                android:background="@color/backgroundGray"
+                android:layout_alignTop="@+id/matchPlayerKDABarBack"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
+
+                <RelativeLayout
+                    android:background="@color/dotaGreen"
+                    android:id="@+id/matchPlayerKillBar"
+                    android:layout_width="33dp"
+                    android:layout_height="match_parent"></RelativeLayout>
+
+                <RelativeLayout
+                    android:background="@color/dotaRed"
+                    android:id="@+id/matchPlayerDeathBar"
+                    android:layout_width="33dp"
+                    android:layout_height="match_parent"></RelativeLayout>
+
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/playerLayoutDamage"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="45000 damage"
+                android:textColor="@color/dotaBlue"
+                android:id="@+id/matchPlayerDamage"
+                android:layout_alignTop="@+id/matchPlayerGoldBarBack"
+                android:layout_alignLeft="@+id/matchPlayerGoldBarBack"
+                android:layout_alignStart="@+id/matchPlayerGoldBarBack" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="100dp"
+                android:layout_height="10dp"
+                android:id="@+id/matchPlayerDamageBarBack"
+                android:background="@color/backgroundGray"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
+
+                <RelativeLayout
+                    android:background="@color/dotaBlue"
+                    android:id="@+id/matchPlayerDamageBar"
+                    android:layout_width="77dp"
+                    android:layout_height="match_parent"></RelativeLayout>
+
+
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+</LinearLayout>

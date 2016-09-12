@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/playerMostPlayedTemplate">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="56dp"
+        android:id="@+id/playerMostPlayedIcon"
+        android:src="@drawable/default_hero"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/playerMostPlayedCount"
+        android:layout_alignStart="@+id/playerMostPlayedCount"
+        android:layout_marginLeft="26dp"
+        android:layout_marginStart="26dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="1W"
+                android:id="@+id/playerMostPlayedVictory"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="1W"
+                android:id="@+id/playerMostPlayedDefeat"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="150dp"
+            android:layout_height="10dp"
+            android:id="@+id/playerMostPlayedBar"
+            android:background="@color/dotaRed"
+            android:layout_alignTop="@+id/playerMatchType"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
+
+            <RelativeLayout
+                android:background="@color/dotaGreen"
+                android:id="@+id/playerMostPlayedBarVictory"
+                android:layout_width="75dp"
+                android:layout_height="match_parent"></RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="50%"
+        android:id="@+id/playerMostPlayedRate"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/linearLayout"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="30"
+        android:id="@+id/playerMostPlayedCount"
+        android:layout_toRightOf="@+id/playerMostPlayedIcon"
+        android:layout_toEndOf="@+id/playerMostPlayedIcon"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="15dp" />
+
+
+</RelativeLayout>

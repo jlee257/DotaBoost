@@ -1,13 +1,73 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="us.qywang.dotaboost.MatchViewFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="match view fragment" />
 
-</FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Radiant Victory"
+            android:id="@+id/matchResult"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/match_id"
+            android:id="@+id/matchIdText"
+            android:layout_below="@+id/matchResult"
+            android:layout_alignLeft="@+id/matchResult"
+            android:layout_alignStart="@+id/matchResult"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="25dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="000000000"
+            android:id="@+id/matchIdNumber"
+            android:layout_below="@+id/matchResult"
+            android:layout_toRightOf="@+id/matchIdText"
+            android:layout_toEndOf="@+id/matchIdText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="(30:00)"
+            android:id="@+id/matchDuration"
+            android:layout_above="@+id/matchIdNumber"
+            android:layout_toRightOf="@+id/matchResult"
+            android:layout_toEndOf="@+id/matchResult" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/matchPlayerList"></LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

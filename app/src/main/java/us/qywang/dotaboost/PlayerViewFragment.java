@@ -5,10 +5,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 /**
@@ -22,12 +28,14 @@ import android.widget.Button;
 public class PlayerViewFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String hero_prefix = "http://cdn.dota2.com/apps/dota2/images/heroes/";
+    private static final String hero_suffix = "_lg.png";
+    private static final String item_prefix = "http://cdn.dota2.com/apps/dota2/images/items/";
+    private static final String item_suffix = "_lg.png";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Player mPlayer;
+    private String mPlayerId;
 
     private OnFragmentInteractionListener mListener;
 
@@ -39,16 +47,15 @@ public class PlayerViewFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param player    player that being displayed
      * @return A new instance of fragment PlayerViewFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PlayerViewFragment newInstance(String param1, String param2) {
+    public static PlayerViewFragment newInstance(Player player, String playerId) {
         PlayerViewFragment fragment = new PlayerViewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable("PLAYER", player);
+        args.putString("PLAYERID", playerId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,8 +64,8 @@ public class PlayerViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mPlayer = (Player) getArguments().getSerializable("PLAYER");
+            mPlayerId = getArguments().getString("PLAYERID");
         }
     }
 
@@ -67,7 +74,7 @@ public class PlayerViewFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         if (mListener != null) {
-            mListener.onFragmentInteraction(mParam1);
+            mListener.onFragmentInteraction(mPlayer.personaname);
         }
 
         // Inflate the layout for this fragment
@@ -79,11 +86,56 @@ public class PlayerViewFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Log.d("PlayerView", "Rendering Player View");
+
+        ((TextView) getActivity().findViewById(R.id.playerName)).setText(mPlayer.personaname);
+        ((TextView) getActivity().findViewById(R.id.playerId)).setText(mPlayerId);
+        new DownloadImageTask((ImageView) getActivity().findViewById(R.id.playerPicture))
+                .execute(mPlayer.avatarmedium);
+
+        ((TextView) getActivity().findViewById(R.id.playerKDA)).setText(String.format("%.2f", mPlayer.kda));
+        ((TextView) getActivity().findViewById(R.id.playerWinRate)).setText(String.format("%d%%", mPlayer.win_rate));
+
+
+        LayoutInflater inflater =  (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LinearLayout layoutMostPlayed = (LinearLayout) getActivity().findViewById(R.id.playerMostPlayedList);
+
+        Log.d("PlayerView", ">>>>Rendering Player View Most Played");
+        for (int i = 0; i < mPlayer.most_played.size(); i++) {
+
+            Log.d("PlayerView", ">>>>>>>>Rendering Player View Most Played " + Integer.toString(i));
+            View mostPlayed = inflater.inflate(R.layout.fragment_player_view_most_played, null);
+            PlayedHero mHero = mPlayer.most_played.get(i);
+
+            new DownloadImageTask((ImageView) mostPlayed.findViewById(R.id.playerMostPlayedIcon))
+                    .execute(hero_prefix + mHero.hero_name + hero_suffix);
+
+            if (mHero.count < 1) {
+                mHero.count = 1;
+            }
+
+            ((TextView) mostPlayed.findViewById(R.id.playerMostPlayedCount)).setText(Integer.toString(mHero.count));
+            ((TextView) mostPlayed.findViewById(R.id.playerMostPlayedVictory)).setText(Integer.toString(mHero.win) + "W");
+            ((TextView) mostPlayed.findViewById(R.id.playerMostPlayedDefeat)).setText(Integer.toString(mHero.count - mHero.win) + "L");
+            ((TextView) mostPlayed.findViewById(R.id.playerMostPlayedRate)).setText(
+                    String.format("%.1f%%", ((double) mHero.win) * 100 / mHero.count));
+
+//            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 65, getResources().getDisplayMetrics());
+            layoutMostPlayed.addView(mostPlayed);
+
+            ViewGroup.LayoutParams p = ((LinearLayout) mostPlayed.findViewById(R.id.playerMostPlayedBar)).getLayoutParams();
+            ViewGroup.LayoutParams p_child = ((RelativeLayout) mostPlayed.findViewById(R.id.playerMostPlayedBarVictory)).getLayoutParams();
+            p_child.width = (int) (((double) mHero.win / (double) mHero.count) * p.width);
+
+            ((RelativeLayout) mostPlayed.findViewById(R.id.playerMostPlayedBarVictory)).requestLayout();
+        }
+        Log.d("PlayerView", ">>>>Rendering Player View Most Played FINISHED");
+
         Button matchButton = (Button) getActivity().findViewById(R.id.match_button);
         matchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MatchViewFragment matchViewFragment = MatchViewFragment.newInstance("hi", "hi");
+                MatchViewFragment matchViewFragment = MatchViewFragment.newInstance(new Match());
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(
                         R.id.mainLayout,
@@ -94,6 +146,82 @@ public class PlayerViewFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+
+        LinearLayout layoutRecentMatches = (LinearLayout) getActivity().findViewById(R.id.playerMatchesList);
+
+        Log.d("PlayerView", ">>>>Rendering Player View Recent Matches");
+        for (int i = 0; i < mPlayer.matches.size(); i++) {
+
+            Log.d("PlayerView", ">>>>>>>>Rendering Player View Recent Match " + Integer.toString(i));
+            View simpleMatch = inflater.inflate(R.layout.fragment_player_view_simple_match, null);
+            MatchSimple mMatch = mPlayer.matches.get(i);
+
+            new DownloadImageTask((ImageView) simpleMatch.findViewById(R.id.playerMatchHeroIcon))
+                    .execute(hero_prefix + mMatch.hero_name + hero_suffix);
+
+            if (mMatch.win) {
+                ((RelativeLayout) simpleMatch.findViewById(R.id.playerMatchLayout))
+                        .setBackgroundColor(getResources().getColor(R.color.backgroundVictory));
+            } else {
+                ((RelativeLayout) simpleMatch.findViewById(R.id.playerMatchLayout))
+                        .setBackgroundColor(getResources().getColor(R.color.backgroundDefeat));
+            }
+
+            final String matchIdPass = mMatch.match_id;
+
+            ((RelativeLayout) simpleMatch.findViewById(R.id.playerMatchLayout))
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MatchViewFragment matchViewFragment = MatchViewFragment.newInstance(new Match());
+                            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(
+                                    R.id.mainLayout,
+                                    matchViewFragment,
+                                    matchViewFragment.getTag()
+                            );
+                            Log.d("PlayerView",
+                                    ">>>>>>>>Rendering Player View Recent match_id: " +
+                                            matchIdPass);
+
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        }
+                    }
+                    );
+
+            ((TextView) simpleMatch.findViewById(R.id.playerMatchType)).setText(mMatch.match_type);
+            if (mMatch.death < 1) {
+                ((TextView) simpleMatch.findViewById(R.id.playerMatchKDA)).setText(
+                        String.format("%d / %d / %d (Perfect)",
+                                mMatch.kill, mMatch.death, mMatch.assist));
+            } else {
+                ((TextView) simpleMatch.findViewById(R.id.playerMatchKDA)).setText(
+                        String.format("%d / %d / %d (%.2f)",
+                                mMatch.kill, mMatch.death, mMatch.assist,
+                                ((double) mMatch.kill + mMatch.assist) / mMatch.death));
+
+            }
+
+
+            layoutRecentMatches.addView(simpleMatch);
+
+            int total = mMatch.kill + mMatch.death + mMatch.assist;
+            if (total < 1) total = 1;
+
+            ViewGroup.LayoutParams p = ((LinearLayout) simpleMatch.findViewById(R.id.playerMatchBarKDA)).getLayoutParams();
+            ViewGroup.LayoutParams p_kill = ((RelativeLayout) simpleMatch.findViewById(R.id.playerMatchBarKill)).getLayoutParams();
+            ViewGroup.LayoutParams p_death = ((RelativeLayout) simpleMatch.findViewById(R.id.playerMatchBarDeath)).getLayoutParams();
+
+            p_kill.width = (int) (((double) mMatch.kill / total) * p.width);
+            p_death.width = (int) (((double) mMatch.death / total) * p.width);
+
+            ((RelativeLayout) simpleMatch.findViewById(R.id.playerMatchBarKill)).requestLayout();
+            ((RelativeLayout) simpleMatch.findViewById(R.id.playerMatchBarDeath)).requestLayout();
+
+        }
+        Log.d("PlayerView", ">>>>Rendering Player View Recent Matches FINISHED");
+
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

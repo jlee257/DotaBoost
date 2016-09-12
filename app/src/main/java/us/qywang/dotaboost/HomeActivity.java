@@ -105,7 +105,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_mystat) {
             // Handle nav_search
-            PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance("My Stat", "hi");
+            PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(new Player(), "364848976");
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(
                     R.id.mainLayout,

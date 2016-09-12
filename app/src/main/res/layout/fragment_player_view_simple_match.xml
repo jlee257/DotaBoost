@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/playerMatchLayout"
+    android:background="@color/backgroundVictory">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="56dp"
+        android:id="@+id/playerMatchHeroIcon"
+        android:src="@drawable/default_hero"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Ranked"
+        android:id="@+id/playerMatchType"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/playerMatchHeroIcon"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/playerMatchType"
+        android:layout_toEndOf="@+id/playerMatchType"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="1/1/1 (2.0)"
+            android:id="@+id/playerMatchKDA"
+            android:layout_alignTop="@+id/playerMostPlayedBar"
+            android:layout_alignLeft="@+id/playerMostPlayedBar"
+            android:layout_alignStart="@+id/playerMostPlayedBar" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="150dp"
+            android:layout_height="10dp"
+            android:id="@+id/playerMatchBarKDA"
+            android:background="@color/backgroundGray"
+            android:layout_alignTop="@+id/playerMatchType"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
+
+            <RelativeLayout
+                android:background="@color/dotaGreen"
+                android:id="@+id/playerMatchBarKill"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"></RelativeLayout>
+
+            <RelativeLayout
+                android:background="@color/dotaRed"
+                android:id="@+id/playerMatchBarDeath"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"></RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
