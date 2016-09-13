@@ -149,6 +149,7 @@ public class JsonConverter {
                 MatchPlayer mp = players.get(k);
                 if (mp.account_id.equals(account_id)){
                     MatchSimple new_match = new MatchSimple();
+                    new_match.hero_name = mp.hero_name;
                     new_match.assist = mp.assists;
                     new_match.death = mp.deaths;
                     new_match.kill = mp.kills;
@@ -191,6 +192,22 @@ public class JsonConverter {
         player.kda = death_total==0? kill_total+assist_total : ((double) kill_total + (double) assist_total)/(double) death_total;
         player.most_played = hero_pool;
 
+        Log.d("match_pool size is", String.valueOf(match_pool.size()));
+
+        ArrayList<String> match_pool_hero = new ArrayList<>();
+        for (int i = 0; i < count; i++){
+            match_pool_hero.add(match_pool.get(i).hero_name);
+        }
+
+
+        ArrayList<String> match_pool_ids = new ArrayList<>();
+        for (int i = 0; i < count; i++){
+            match_pool_ids.add(match_pool.get(i).match_id);
+        }
+
+
+        Log.d("match_pool heroes are", match_pool_hero.toString());
+        Log.d("match_pool ids are", match_pool_ids.toString());
 
         return player;
     }
