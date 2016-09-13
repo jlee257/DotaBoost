@@ -132,7 +132,7 @@ public class PlayerViewFragment extends Fragment {
         Log.d("PlayerView", ">>>>Rendering Player View Most Played FINISHED");
         LinearLayout layoutRecentMatches = (LinearLayout) getActivity().findViewById(R.id.playerMatchesList);
 
-        Log.d("PlayerView", ">>>>Rendering Player View Recent Matches");
+        Log.d("PlayerView", ">>>>Rendering Player View Recent Matches" );
         for (int i = 0; i < mPlayer.matches.size(); i++) {
 
             Log.d("PlayerView", ">>>>>>>>Rendering Player View Recent Match " + Integer.toString(i));
@@ -151,6 +151,7 @@ public class PlayerViewFragment extends Fragment {
             }
 
             final String matchIdPass = mMatch.match_id;
+
 
             ((RelativeLayout) simpleMatch.findViewById(R.id.playerMatchLayout))
                     .setOnClickListener(new View.OnClickListener() {
@@ -176,8 +177,7 @@ public class PlayerViewFragment extends Fragment {
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }
-                    }
-                    );
+                    });
 
             ((TextView) simpleMatch.findViewById(R.id.playerMatchType)).setText(mMatch.match_type);
             if (mMatch.death < 1) {
