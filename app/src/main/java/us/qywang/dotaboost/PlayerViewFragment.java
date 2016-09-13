@@ -130,23 +130,6 @@ public class PlayerViewFragment extends Fragment {
             ((RelativeLayout) mostPlayed.findViewById(R.id.playerMostPlayedBarVictory)).requestLayout();
         }
         Log.d("PlayerView", ">>>>Rendering Player View Most Played FINISHED");
-
-        Button matchButton = (Button) getActivity().findViewById(R.id.match_button);
-        matchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MatchViewFragment matchViewFragment = MatchViewFragment.newInstance(new Match());
-                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(
-                        R.id.mainLayout,
-                        matchViewFragment,
-                        matchViewFragment.getTag()
-                );
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
-
         LinearLayout layoutRecentMatches = (LinearLayout) getActivity().findViewById(R.id.playerMatchesList);
 
         Log.d("PlayerView", ">>>>Rendering Player View Recent Matches");
@@ -173,7 +156,13 @@ public class PlayerViewFragment extends Fragment {
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            MatchViewFragment matchViewFragment = MatchViewFragment.newInstance(new Match());
+                            Match match = new Match();
+                            try {
+                                match = JsonConverter.get_match(matchIdPass);
+                            } catch (Exception e) {
+                                Log.d("PlayerView", ">>>>Could not load match");
+                            }
+                            MatchViewFragment matchViewFragment = MatchViewFragment.newInstance(match);
                             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                             fragmentTransaction.replace(
                                     R.id.mainLayout,

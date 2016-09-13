@@ -2,6 +2,7 @@ package us.qywang.dotaboost;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -33,6 +38,12 @@ public class HomeActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -40,8 +51,7 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
             }
         });
 
@@ -105,13 +115,20 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_mystat) {
             // Handle nav_search
-            PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(new Player(), "364848976");
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(
-                    R.id.mainLayout,
-                    playerViewFragment,
-                    playerViewFragment.getTag()
-            ).commit();
+            try {
+                Player player = new Player();
+                player = JsonConverter.get_player("364848976");
+                PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(player, "364848976");
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
+                fragmentManager.beginTransaction().replace(
+                        R.id.mainLayout,
+                        playerViewFragment,
+                        playerViewFragment.getTag()
+                ).commit();
+            } catch (Exception e) {
+                Log.d("DEBUG", "Can't load");
+            }
 
         } else if (id == R.id.nav_search) {
             // Handle nav_search

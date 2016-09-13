@@ -144,8 +144,14 @@ public class MatchViewFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             String title = playerIdPass;
+                            Player player = new Player();
+                            try {
+                                player = JsonConverter.get_player(playerIdPass);
+                            } catch (Exception e) {
+                                Log.d("DEBUG", "Can't load");
+                            };
+                            PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(player, playerIdPass);
                             Toast.makeText(getActivity(), "Loading Player data...", Toast.LENGTH_LONG).show();
-                            PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(new Player(), playerIdPass);
                             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                             fragmentTransaction.replace(
                                     R.id.mainLayout,

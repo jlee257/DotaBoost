@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +103,15 @@ public class SearchFragment extends Fragment {
                     errorDisplay.setVisibility(View.VISIBLE);
                 } else {
                     errorDisplay.setVisibility(View.INVISIBLE);
-                    PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(new Player(), "364848976");
+
+
+                    Player player = new Player();
+                    try {
+                        player = JsonConverter.get_player(title);
+                    } catch (Exception e) {
+                        Log.d("DEBUG", "Can't load");
+                    };
+                    PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(player, title);
                     FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(
                             R.id.mainLayout,
