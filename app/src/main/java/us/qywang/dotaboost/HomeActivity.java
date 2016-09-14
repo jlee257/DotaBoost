@@ -1,5 +1,6 @@
 package us.qywang.dotaboost;
 
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -47,13 +48,6 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -111,66 +105,99 @@ public class HomeActivity extends AppCompatActivity
 
         Log.d("DEBUG", "HomeActivity onNavigationItemSelected called");
 
-        int id = item.getItemId();
+        final int id = item.getItemId();
+        String indicator = "INDICATOR";
 
-        if (id == R.id.nav_mystat) {
-            // Handle nav_search
-            try {
-                Player player = new Player();
-                player = JsonConverter.get_player("364848976");
-                PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(player, "364848976");
-                FragmentManager fragmentManager = getSupportFragmentManager();
 
-                fragmentManager.beginTransaction().replace(
-                        R.id.mainLayout,
-                        playerViewFragment,
-                        playerViewFragment.getTag()
-                ).commit();
-            } catch (Exception e) {
-                Log.d("DEBUG", "Can't load");
+        Log.d("BEFORE", indicator);
+
+        final ProgressDialog progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.show();
+        new Thread()
+        {
+            public void run()
+            {
+
+                try
+                {
+
+                    if (id == R.id.nav_mystat) {
+                        // Handle nav_search
+                        try {
+
+
+
+                            Player player = JsonConverter.get_player("364848976");
+                            PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(player, "364848976");
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+
+
+
+                            fragmentManager.beginTransaction().replace(
+                                    R.id.mainLayout,
+                                    playerViewFragment,
+                                    playerViewFragment.getTag()
+                            ).commit();
+                        } catch (Exception e) {
+                            Log.d("DEBUG", "Can't load");
+                        }
+
+                    } else if (id == R.id.nav_search) {
+                        // Handle nav_search
+                        SearchFragment searchFragment = SearchFragment.newInstance("hi", "hi");
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(
+                                R.id.mainLayout,
+                                searchFragment,
+                                searchFragment.getTag()
+                        ).commit();
+
+                    } else if (id == R.id.nav_favorite) {
+                        // Handle nav_favorite
+                        FavoriteFragment favoriteFragment = FavoriteFragment.newInstance("hi", "hi");
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(
+                                R.id.mainLayout,
+                                favoriteFragment,
+                                favoriteFragment.getTag()
+                        ).commit();
+
+                    } else if (id == R.id.nav_counterpick) {
+                        // Handle nav_counterpick
+                        CounterFragment counterFragment = CounterFragment.newInstance("hi", "hi");
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(
+                                R.id.mainLayout,
+                                counterFragment,
+                                counterFragment.getTag()
+                        ).commit();
+
+                    } else if (id == R.id.nav_settings) {
+                        // Handle nav_settings
+                        SettingsFragment settingsFragment = SettingsFragment.newInstance("hi", "hi");
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(
+                                R.id.mainLayout,
+                                settingsFragment,
+                                settingsFragment.getTag()
+                        ).commit();
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.e("tag",e.getMessage());
+                }
+// dismiss the progressdialog
+                progress.dismiss();
             }
+        }.start();
 
-        } else if (id == R.id.nav_search) {
-            // Handle nav_search
-            SearchFragment searchFragment = SearchFragment.newInstance("hi", "hi");
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(
-                    R.id.mainLayout,
-                    searchFragment,
-                    searchFragment.getTag()
-            ).commit();
 
-        } else if (id == R.id.nav_favorite) {
-            // Handle nav_favorite
-            FavoriteFragment favoriteFragment = FavoriteFragment.newInstance("hi", "hi");
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(
-                    R.id.mainLayout,
-                    favoriteFragment,
-                    favoriteFragment.getTag()
-            ).commit();
+        Log.d("AFTER", indicator);
 
-        } else if (id == R.id.nav_counterpick) {
-            // Handle nav_counterpick
-            CounterFragment counterFragment = CounterFragment.newInstance("hi", "hi");
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(
-                    R.id.mainLayout,
-                    counterFragment,
-                    counterFragment.getTag()
-            ).commit();
-
-        } else if (id == R.id.nav_settings) {
-            // Handle nav_settings
-            SettingsFragment settingsFragment = SettingsFragment.newInstance("hi", "hi");
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(
-                    R.id.mainLayout,
-                    settingsFragment,
-                    settingsFragment.getTag()
-            ).commit();
-
-        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

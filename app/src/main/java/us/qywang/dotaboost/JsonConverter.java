@@ -210,6 +210,7 @@ public class JsonConverter {
 
 
         player.most_played = hero_pool;
+        player.matches = match_pool;
 
         Log.d("match_pool size is", String.valueOf(match_pool.size()));
 
