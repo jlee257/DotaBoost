@@ -100,7 +100,7 @@ public class PlayerViewFragment extends Fragment {
 
         LayoutInflater inflater =  (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final LinearLayout layoutMostPlayed = (LinearLayout) getActivity().findViewById(R.id.playerMostPlayedList);
-        final ImageButton buttonTogglePlayed = (ImageButton) getActivity().findViewById(R.id.playerToggleMostPlayedButton);
+        final ImageView buttonTogglePlayed = (ImageView) getActivity().findViewById(R.id.playerToggleMostPlayedButton);
         ((RelativeLayout) getActivity().findViewById(R.id.playerToggleMostPlayed))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -147,7 +147,7 @@ public class PlayerViewFragment extends Fragment {
         Log.d("PlayerView", ">>>>Rendering Player View Most Played FINISHED");
 
         final LinearLayout layoutRecentMatches = (LinearLayout) getActivity().findViewById(R.id.playerMatchesList);
-        final ImageButton buttonToggleMatches = (ImageButton) getActivity().findViewById(R.id.playerToggleMatchesButton);
+        final ImageView buttonToggleMatches = (ImageView) getActivity().findViewById(R.id.playerToggleMatchesButton);
         ((RelativeLayout) getActivity().findViewById(R.id.playerToggleMatches))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override

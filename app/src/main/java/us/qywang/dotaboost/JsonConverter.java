@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -106,7 +108,7 @@ public class JsonConverter {
 
 
     public static Player get_player(String account_id) throws JSONException {
-        int count = 20;
+        final int count = 20;
 
         Player player = new Player();
         String steam_id = BitConverter.converter(account_id);
@@ -131,9 +133,9 @@ public class JsonConverter {
 
         for (int i = 0; i < count; i++){
             match_arr.add(get_match(
-                            matches.getJSONObject(i).getString("match_id"),
-                            map1,
-                            map2));
+                    matches.getJSONObject(i).getString("match_id"),
+                    map1,
+                    map2));
         }
 
         int kill_total = 0;
@@ -141,6 +143,8 @@ public class JsonConverter {
         int death_total = 0;
         int win = 0;
         ArrayList<PlayedHero> hero_pool = new ArrayList<>();
+
+
         ArrayList<MatchSimple> match_pool = new ArrayList<>();
 
         for (int j = 0; j < count; j++){
@@ -149,6 +153,7 @@ public class JsonConverter {
                 MatchPlayer mp = players.get(k);
                 if (mp.account_id.equals(account_id)){
                     MatchSimple new_match = new MatchSimple();
+                    new_match.hero_name = mp.hero_name;
                     new_match.assist = mp.assists;
                     new_match.death = mp.deaths;
                     new_match.kill = mp.kills;
@@ -171,6 +176,7 @@ public class JsonConverter {
                     }
                     if (hero_not_in_lst){
                         PlayedHero new_hero = new PlayedHero();
+                        new_hero.win = mp.win? 1: 0;
                         new_hero.hero_name = mp.hero_name;
                         new_hero.count += 1;
                         hero_pool.add(new_hero);
@@ -184,13 +190,44 @@ public class JsonConverter {
         double avg_assist = assist_total/count;
         double avg_death = death_total/count;
 
+        Log.d("wined game number", String.valueOf(win));
+        Log.d("total game number", String.valueOf(count));
+
         player.kill = avg_killed;
         player.assist = avg_assist;
         player.death = avg_death;
-        player.win_rate = win/count;
-        player.kda = death_total==0? kill_total+assist_total : ((double) kill_total + (double) assist_total)/(double) death_total;
-        player.most_played = hero_pool;
+        player.win_rate = (int) ((double)win/(double)count*100);
 
+
+        player.kda = death_total==0? kill_total+assist_total : ((double) kill_total + (double) assist_total)/(double) death_total;
+
+        Collections.sort(hero_pool, new Comparator<PlayedHero>() {
+            @Override
+            public int compare(PlayedHero p1, PlayedHero p2) {
+                return p2.win*p2.win/count - p1.win*p1.win/count;
+            }
+        });
+
+
+        player.most_played = hero_pool;
+        player.matches = match_pool;
+
+        Log.d("match_pool size is", String.valueOf(match_pool.size()));
+
+        ArrayList<String> match_pool_hero = new ArrayList<>();
+        for (int i = 0; i < count; i++){
+            match_pool_hero.add(match_pool.get(i).hero_name);
+        }
+
+
+        ArrayList<String> match_pool_ids = new ArrayList<>();
+        for (int i = 0; i < count; i++){
+            match_pool_ids.add(match_pool.get(i).match_id);
+        }
+
+
+        Log.d("match_pool heroes are", match_pool_hero.toString());
+        Log.d("match_pool ids are", match_pool_ids.toString());
 
         return player;
     }
