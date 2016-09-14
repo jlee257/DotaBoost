@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -98,7 +99,21 @@ public class PlayerViewFragment extends Fragment {
 
 
         LayoutInflater inflater =  (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LinearLayout layoutMostPlayed = (LinearLayout) getActivity().findViewById(R.id.playerMostPlayedList);
+        final LinearLayout layoutMostPlayed = (LinearLayout) getActivity().findViewById(R.id.playerMostPlayedList);
+        final ImageButton buttonTogglePlayed = (ImageButton) getActivity().findViewById(R.id.playerToggleMostPlayedButton);
+        ((RelativeLayout) getActivity().findViewById(R.id.playerToggleMostPlayed))
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (layoutMostPlayed.getVisibility() == View.VISIBLE) {
+                            layoutMostPlayed.setVisibility(View.GONE);
+                            buttonTogglePlayed.setImageResource(R.drawable.ic_keyboard_arrow_down_24dp);
+                        } else {
+                            layoutMostPlayed.setVisibility(View.VISIBLE);
+                            buttonTogglePlayed.setImageResource(R.drawable.ic_keyboard_arrow_up_24dp);
+                        }
+                    }
+                });
 
         Log.d("PlayerView", ">>>>Rendering Player View Most Played");
         for (int i = 0; i < mPlayer.most_played.size(); i++) {
@@ -130,7 +145,23 @@ public class PlayerViewFragment extends Fragment {
             ((RelativeLayout) mostPlayed.findViewById(R.id.playerMostPlayedBarVictory)).requestLayout();
         }
         Log.d("PlayerView", ">>>>Rendering Player View Most Played FINISHED");
-        LinearLayout layoutRecentMatches = (LinearLayout) getActivity().findViewById(R.id.playerMatchesList);
+
+        final LinearLayout layoutRecentMatches = (LinearLayout) getActivity().findViewById(R.id.playerMatchesList);
+        final ImageButton buttonToggleMatches = (ImageButton) getActivity().findViewById(R.id.playerToggleMatchesButton);
+        ((RelativeLayout) getActivity().findViewById(R.id.playerToggleMatches))
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (layoutRecentMatches.getVisibility() == View.VISIBLE) {
+                            layoutRecentMatches.setVisibility(View.GONE);
+                            buttonToggleMatches.setImageResource(R.drawable.ic_keyboard_arrow_down_24dp);
+                        } else {
+                            layoutRecentMatches.setVisibility(View.VISIBLE);
+                            buttonToggleMatches.setImageResource(R.drawable.ic_keyboard_arrow_up_24dp);
+                        }
+                    }
+                });
+
 
         Log.d("PlayerView", ">>>>Rendering Player View Recent Matches" );
         for (int i = 0; i < mPlayer.matches.size(); i++) {

@@ -30,6 +30,15 @@
     <string name="match_id">Match ID:</string>
 
 
+    <!-- Settings Fragment -->
+    <string name="settings_myaccount">My Account</string>
+    <string name="settings_myaccount_default">No account has been set</string>
+
+
+
+    <!-- Toasts -->
+    <string name="warning_account_not_set">Account has not been set!</string>
+    <string name="warning_could_not_load">Could not find the data</string>
 
 
 

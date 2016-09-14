@@ -17,7 +17,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_toLeftOf="@+id/searchButton"
-            android:layout_toStartOf="@+id/searchButton" />
+            android:layout_toStartOf="@+id/searchButton"
+            android:inputType="number" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -52,6 +53,7 @@
                 android:id="@+id/imageView2"
                 android:layout_marginTop="25dp"
                 android:layout_centerHorizontal="true" />
+
         </RelativeLayout>
     </RelativeLayout>
 

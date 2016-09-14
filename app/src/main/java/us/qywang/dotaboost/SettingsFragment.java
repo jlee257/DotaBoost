@@ -1,12 +1,18 @@
 package us.qywang.dotaboost;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 /**
@@ -71,6 +77,58 @@ public class SettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
+
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        RelativeLayout setAccountLayout = (RelativeLayout) getActivity().findViewById(R.id.settingSetAccount);
+        final RelativeLayout setAccountSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.settingSetAccountNewAccount);
+        setAccountSearchLayout.setVisibility(View.GONE);
+        setAccountLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (setAccountSearchLayout.getVisibility() == View.VISIBLE) {
+                    setAccountSearchLayout.setVisibility(View.GONE);
+                } else {
+                    setAccountSearchLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+
+        ImageButton setAccountSearchButton = (ImageButton) getActivity().findViewById(R.id.settingSetAccountSearchButton);
+        final TextView setAccountText = (TextView) getActivity().findViewById(R.id.settingSetAccountText);
+        final EditText setAccountSearchEditText = (EditText) getActivity().findViewById(R.id.settingSetAccountEditText);
+        SharedPreferences sharedpreferences = getActivity().getSharedPreferences("DOTABOOSTPREF", Context.MODE_PRIVATE);
+        setAccountText.setText(sharedpreferences.getString("MYACCOUNT", getString(R.string.settings_myaccount_default)));
+        setAccountSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String new_name = setAccountSearchEditText.getText().toString();
+                SharedPreferences sharedpreferences = getActivity().getSharedPreferences("DOTABOOSTPREF", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                editor.putString("MYACCOUNT", new_name);
+                editor.commit();
+                setAccountText.setText(sharedpreferences.getString("MYACCOUNT", getString(R.string.settings_myaccount_default)));
+
+                // hide keyboard
+                View view = getActivity().getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+
+
+                setAccountSearchLayout.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
+
+
 
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {

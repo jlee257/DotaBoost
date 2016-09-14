@@ -1,5 +1,7 @@
 package us.qywang.dotaboost;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -16,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -47,13 +50,6 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -115,19 +111,32 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_mystat) {
             // Handle nav_search
-            try {
-                Player player = new Player();
-                player = JsonConverter.get_player("364848976");
-                PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(player, "364848976");
-                FragmentManager fragmentManager = getSupportFragmentManager();
 
-                fragmentManager.beginTransaction().replace(
-                        R.id.mainLayout,
-                        playerViewFragment,
-                        playerViewFragment.getTag()
-                ).commit();
-            } catch (Exception e) {
-                Log.d("DEBUG", "Can't load");
+            SharedPreferences sharedpreferences = getSharedPreferences("DOTABOOSTPREF", Context.MODE_PRIVATE);
+            String account = sharedpreferences.getString("MYACCOUNT", getString(R.string.settings_myaccount_default));
+
+            if (account == getString(R.string.settings_myaccount_default)) {
+                Toast.makeText(this, getString(R.string.warning_account_not_set), Toast.LENGTH_LONG).show();
+                return true;
+            } else {
+                try {
+                    Player player = new Player();
+                    player = JsonConverter.get_player(account);
+                    if (player == null) {
+                        Toast.makeText(this, getString(R.string.warning_could_not_load), Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+                    PlayerViewFragment playerViewFragment = PlayerViewFragment.newInstance(player, account);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+
+                    fragmentManager.beginTransaction().replace(
+                            R.id.mainLayout,
+                            playerViewFragment,
+                            playerViewFragment.getTag()
+                    ).commit();
+                } catch (Exception e) {
+                    Log.d("DEBUG", "Can't load");
+                }
             }
 
         } else if (id == R.id.nav_search) {
